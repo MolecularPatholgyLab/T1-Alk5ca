@@ -34,6 +34,7 @@
 ## Load libraries
 library(MCPcounter)
 library(ggsignif)
+library(ggbeeswarm)
 library(ggplot2)
 library(survival)
 library(survminer)
