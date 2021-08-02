@@ -73,8 +73,8 @@ all(colnames(t1)==meta$Sample_ID)
 ##################################################--------------------------------------###########################################################
 
 MCP <- MCPcounter.estimate(t1,featuresType="HUGO_symbols",
-                           probesets=read.table(curl("http://raw.githubusercontent.com/ebecht/MCPcounter/master/Signatures/probesets.txt"),sep="\t",stringsAsFactors=FALSE,colClasses="character"),
-                           genes=read.table(curl("http://raw.githubusercontent.com/ebecht/MCPcounter/master/Signatures/genes.txt"),sep="\t",stringsAsFactors=FALSE,header=TRUE,colClasses="character",check.names=FALSE))
+       probesets=read.table(curl("http://raw.githubusercontent.com/ebecht/MCPcounter/master/Signatures/probesets.txt"),sep="\t",colClasses="character"),
+       genes=read.table(curl("http://raw.githubusercontent.com/ebecht/MCPcounter/master/Signatures/genes.txt"),sep="\t",header=TRUE,colClasses="character",check.names=FALSE))
 
 ###  Transpose the result
 MCP <-as.data.frame(t(MCP))
@@ -93,13 +93,13 @@ wilcox.test(MCP[MCP$group=="Relapse","Fibroblasts"], MCP[MCP$group=="Non-Relapse
 tiff("fibroblast_new.tiff", units="mm", width=54, height=54, res=300)
 set.seed(121)
 p_f <- ggplot(MCP, aes(x = group, y = Fibroblasts, fill = group))+geom_boxplot(size = 0.3)+geom_jitter(size=0.65, width=.1)+
-  labs(y = "MCP-counter scores")+theme(legend.position = "none", axis.title.x=element_blank(), 
-                                       axis.title.y = element_text(size = 12, family = "Arial"), axis.text.x = element_text(size = 10, family = "Arial"),
-                                       plot.title = element_text(hjust = 0.5, size = 12, family = "Arial"),axis.text.y = element_text(size = 8),
-                                       panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), panel.border = element_blank(), 
-                                       axis.line = element_line())+ggtitle("Fibroblasts")+scale_fill_manual(values = c('Relapse' = '#ff4242', 'Non-Relapse' = '#1f1fd8'))+
-  ylim(c(8,10.5))
-
+       labs(y = "MCP-counter scores")+theme(legend.position = "none", axis.title.x=element_blank(), 
+       axis.title.y = element_text(size = 12, family = "Arial"), axis.text.x = element_text(size = 10, family = "Arial"),
+       plot.title = element_text(hjust = 0.5, size = 12, family = "Arial"),axis.text.y = element_text(size = 8),
+       panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), panel.border = element_blank(), 
+       axis.line = element_line())+ggtitle("Fibroblasts")+scale_fill_manual(values = c('Relapse' = '#ff4242', 'Non-Relapse' = '#1f1fd8'))+
+       ylim(c(8,10.5))
+ 
 #### Add p-value (more beautiful)
 p_f+geom_signif(comparisons = list(c("Relapse", "Non-Relapse")), test="wilcox.test",
                 map_signif_level=TRUE, color = "black", annotations = 'P=0.17', fontface = "italic")
@@ -114,12 +114,12 @@ wilcox.test(MCP[MCP$group=="Relapse", "Cytotoxic lymphocytes"], MCP[MCP$group=="
 tiff("CTL_new.tiff", units="mm", width=54, height=54, res=300)
 set.seed(121)
 p_f <- ggplot(MCP, aes(x = group, y = `Cytotoxic lymphocytes`, fill = group))+geom_boxplot(size = 0.3)+geom_jitter(size=0.65, width=.1)+
-  labs(y = "MCP-counter scores")+theme(legend.position = "none", axis.title.x=element_blank(), 
-                                       axis.title.y = element_text(size = 12, family = "Arial"), axis.text.x = element_text(size = 10, family = "Arial"),
-                                       plot.title = element_text(hjust = 0.5, size = 12, family = "Arial"),axis.text.y = element_text(size = 8),
-                                       panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), panel.border = element_blank(), 
-                                       axis.line = element_line())+ggtitle("Cytotoxic lymphocytes")+scale_fill_manual(values = c('Relapse' = '#ff4242', 'Non-Relapse' = '#1f1fd8'))+
-  ylim(c(3.5,4.3))
+       labs(y = "MCP-counter scores")+theme(legend.position = "none", axis.title.x=element_blank(), 
+       axis.title.y = element_text(size = 12, family = "Arial"), axis.text.x = element_text(size = 10, family = "Arial"),
+       plot.title = element_text(hjust = 0.5, size = 12, family = "Arial"),axis.text.y = element_text(size = 8),
+       panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), panel.border = element_blank(), 
+       axis.line = element_line())+ggtitle("Cytotoxic lymphocytes")+scale_fill_manual(values = c('Relapse' = '#ff4242', 'Non-Relapse' = '#1f1fd8'))+
+       ylim(c(3.5,4.3))
 
 #### Add p-value (more beautiful)
 p_f+geom_signif(comparisons = list(c("Relapse", "Non-Relapse")), 
@@ -143,12 +143,12 @@ cor.test(mcp_qpath$Fibroblasts, mcp_qpath$QuPath_stromal, method = "spearman")
 tiff("cor_mcp_qpath_2.tiff", units="mm", width=75, height=55, res=300)
 
 g <- ggplot(mcp_qpath, aes(Fibroblasts, QuPath_stromal))+geom_point(size = 0.65, aes(color=group))+geom_smooth(method = "lm", size=0.2)+
-  labs(x = "MCP-counter scores", y = "QuPath-scores")+
-  theme_bw()+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), 
-                   panel.border = element_blank(),axis.line = element_line(), legend.position= c(0.87, 0.2),legend.text = element_text(size = 7),
-                   legend.title = element_blank(),legend.key.width = unit(0.002, "mm"),legend.key.size = unit(0.3, "cm"),
-                   axis.title = element_text(size = 12, family = "Arial"),plot.title = element_text(hjust = 0.5, size = 12, 
-                                                                                                    family = "Arial"))+ggtitle("Fibroblasts")
+     labs(x = "MCP-counter scores", y = "QuPath-scores")+
+     theme_bw()+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), 
+     panel.border = element_blank(),axis.line = element_line(), legend.position= c(0.87, 0.2),legend.text = element_text(size = 7),
+     legend.title = element_blank(),legend.key.width = unit(0.002, "mm"),legend.key.size = unit(0.3, "cm"),
+     axis.title = element_text(size = 12, family = "Arial"),plot.title = element_text(hjust = 0.5, size = 12, 
+     family = "Arial"))+ggtitle("Fibroblasts")
 
 g+annotate("text", x=8.5, y=99, label="rho = 0.69", size = 3.5)+annotate("text", x=8.5, y=90, label="P = 0.00009", size = 3.5, fontface = "italic")+
   scale_color_manual(values = c('Relapse' = '#ff4242', 'Non-Relapse' = '#1f1fd8'))
@@ -170,8 +170,8 @@ colnames(selected_mutationData_t1)[2] <- "Mutation"
 selected_mutationData_t1_2 <- selected_mutationData_t1[,-c(4,5)]
 selected_mutationData_t1_3 <- unique(selected_mutationData_t1_2)
 df <- selected_mutationData_t1_3 %>%
-  group_by(group, Mutation) %>%
-  summarise(n())
+      group_by(group, Mutation) %>%
+      summarise(n())
 
 ## caculate proportion
 df <- as.data.frame(df)
@@ -265,11 +265,11 @@ cor.test(MCP$Fibroblasts, MCP$HALLMARK_TGF_BETA_SIGNALING, method = "spearman")
 ## plot
 tiff("Fig.1F.tiff", units="mm", width=75, height=55, res=300)
 p <- ggplot(MCP, aes(Fibroblasts, HALLMARK_TGF_BETA_SIGNALING))+geom_point(size = 0.65, aes(color=group))+geom_smooth(method = "lm", size=0.2)+
-  labs(x = "MCP-score_Fibroblasts", y = "ssGSEA-score_TGFb")+
-  theme_bw()+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(),
-                   panel.border = element_blank(),axis.line = element_line(), axis.text = element_text(size = 8, family = "Arial"),
-                   legend.position= c(0.87, 0.15),legend.text = element_text(size = 6),legend.title = element_blank(),legend.key.width = unit(0.002, "mm"),
-                   legend.key.size = unit(0.3, "cm"),axis.title = element_text(size = 12, family = "Arial"))
+     labs(x = "MCP-score_Fibroblasts", y = "ssGSEA-score_TGFb")+
+     theme_bw()+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(),
+     panel.border = element_blank(),axis.line = element_line(), axis.text = element_text(size = 8, family = "Arial"),
+     legend.position= c(0.87, 0.15),legend.text = element_text(size = 6),legend.title = element_blank(),legend.key.width = unit(0.002, "mm"),
+     legend.key.size = unit(0.3, "cm"),axis.title = element_text(size = 12, family = "Arial"))
 
 p+annotate("text", x=8.5, y=0.63, label="rho = -0.07", size = 3.5)+annotate("text", x=8.5, y=0.615, label="P = 0.7", size = 3.5, fontface = "italic")+
   scale_color_manual(values = c('Relapse' = '#ff4242', 'Non-Relapse' = '#1f1fd8'))
@@ -300,12 +300,12 @@ pcr$label <- meta$label
 tiff("Extended Data Figure 1A.tiff", units="mm", width=60, height=50, res=300)
 p=ggplot(pcr, aes(PC1, PC2, color = Group)) + geom_point(size=0.65)+labs(x='PC1=31.82%', y='PC2=8.91%')+
   theme_bw(base_size = 7)+theme(axis.text.x = element_text(size = 7.5),legend.key.width = unit(2, "mm"),
-                                axis.text.y = element_text(size = 7.5),axis.title = element_text(size = 9.5, family = "Helvetica"),
-                                legend.text = element_text(margin = margin(r = 0.15, unit = "cm"), size=7),
-                                panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                legend.margin=margin(5,0,0,0),legend.box.margin=margin(-10,-10,-7,-10),
-                                panel.background = element_blank(), legend.title = element_blank(), legend.position = "top",
-                                legend.spacing.x = unit(0, 'cm'))
+  axis.text.y = element_text(size = 7.5),axis.title = element_text(size = 9.5, family = "Helvetica"),
+  legend.text = element_text(margin = margin(r = 0.15, unit = "cm"), size=7),
+  panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  legend.margin=margin(5,0,0,0),legend.box.margin=margin(-10,-10,-7,-10),
+  panel.background = element_blank(), legend.title = element_blank(), legend.position = "top",
+  legend.spacing.x = unit(0, 'cm'))
 
 p+scale_color_manual(values = c('Relapse' = '#ff4242', 'Non-Relapse' = '#1f1fd8'))
 dev.off()
@@ -510,8 +510,8 @@ t_ssgsea_focus <- rownames_to_column(t_ssgsea_focus, var = "sample_ID")
 
 ### MCP
 MCP_FOCUS <- MCPcounter.estimate(exp.2,featuresType="HUGO_symbols",
-                                 probesets=read.table(curl("http://raw.githubusercontent.com/ebecht/MCPcounter/master/Signatures/probesets.txt"),sep="\t",stringsAsFactors=FALSE,colClasses="character"),
-                                 genes=read.table(curl("http://raw.githubusercontent.com/ebecht/MCPcounter/master/Signatures/genes.txt"),sep="\t",stringsAsFactors=FALSE,header=TRUE,colClasses="character",check.names=FALSE))
+             probesets=read.table(curl("http://raw.githubusercontent.com/ebecht/MCPcounter/master/Signatures/probesets.txt"),sep="\t",colClasses="character"),
+             genes=read.table(curl("http://raw.githubusercontent.com/ebecht/MCPcounter/master/Signatures/genes.txt"),sep="\t",header=TRUE,colClasses="character",check.names=FALSE))
 
 MCP_FOCUS[1:5]
 
@@ -532,11 +532,11 @@ cor.test(df$Fibroblasts, df$HALLMARK_TGF_BETA_SIGNALING)
 ## plot
 tiff("Extended Data Figure 1D_(ssGSEA-TGFb)_(MCP-Fibroblast).tiff", units="mm", width=70, height=60, res=300)
 p <- ggplot(df, aes(Fibroblasts, HALLMARK_TGF_BETA_SIGNALING))+geom_point(size = 0.65)+geom_smooth(method = "lm", size=0.2)+
-  labs(x = "MCP score_Fibroblast", y = "ssGSEA score_TGFB")+theme_bw()+theme(panel.grid.major = element_blank(), 
-                                                                             panel.grid.minor = element_blank(),panel.background = element_blank(),
-                                                                             legend.position= c(0.2, 0.85),legend.text = element_text(size = 6),legend.title = element_text(size = 6, face = "bold"),
-                                                                             legend.key.size = unit(0.3, "cm"),panel.border = element_blank(),axis.line = element_line(), 
-                                                                             axis.text = element_text(size = 6, family = "Arial"),axis.title = element_text(size = 12, family = "Arial"))
+     labs(x = "MCP score_Fibroblast", y = "ssGSEA score_TGFB")+theme_bw()+theme(panel.grid.major = element_blank(), 
+     panel.grid.minor = element_blank(),panel.background = element_blank(),
+     legend.position= c(0.2, 0.85),legend.text = element_text(size = 6),legend.title = element_text(size = 6, face = "bold"),
+     legend.key.size = unit(0.3, "cm"),panel.border = element_blank(),axis.line = element_line(), 
+     axis.text = element_text(size = 6, family = "Arial"),axis.title = element_text(size = 12, family = "Arial"))
 p+annotate("text", x=7.3, y=0.4, label="r = 0.55", size = 3)+annotate("text", x=7.3, y=0.38, label="P < 2.2e-16", size = 3, fontface = "italic" )
 dev.off()
 
@@ -546,11 +546,11 @@ cor.test(df$`Cytotoxic lymphocytes`, df$HALLMARK_TGF_BETA_SIGNALING)
 ## plot
 tiff("Extended Data Figure 1D_(ssGSEA-TGFb)_(MCP-Cytotoxic).tiff", units="mm", width=72, height=60, res=300)
 p <- ggplot(df, aes(`Cytotoxic lymphocytes`, HALLMARK_TGF_BETA_SIGNALING))+geom_point(size = 0.65)+geom_smooth(method = "lm", size=0.2)+
-  labs(x = "MCP score_Cytotoxic lymphocytes", y = "ssGSEA score_TGFB")+theme_bw()+theme(panel.grid.major = element_blank(), 
-                                                                                        panel.grid.minor = element_blank(),panel.background = element_blank(),legend.position= c(0.2, 0.85),
-                                                                                        legend.text = element_text(size = 6),legend.title = element_text(size = 6, face = "bold"),legend.key.size = unit(0.3, "cm"),
-                                                                                        panel.border = element_blank(),axis.line = element_line(), axis.text = element_text(size = 6, family = "Arial"),
-                                                                                        axis.title = element_text(size = 12, family = "Arial"))
+     labs(x = "MCP score_Cytotoxic lymphocytes", y = "ssGSEA score_TGFB")+theme_bw()+theme(panel.grid.major = element_blank(), 
+     panel.grid.minor = element_blank(),panel.background = element_blank(),legend.position= c(0.2, 0.85),
+     legend.text = element_text(size = 6),legend.title = element_text(size = 6, face = "bold"),legend.key.size = unit(0.3, "cm"),
+     panel.border = element_blank(),axis.line = element_line(), axis.text = element_text(size = 6, family = "Arial"),
+     axis.title = element_text(size = 12, family = "Arial"))
 p+annotate("text", x=2.25, y=0.4, label="r = -0.3", size = 3)+annotate("text", x=2.25, y=0.38, label="P < 1.09e-09", size = 3, fontface = 'italic')
 
 dev.off()
@@ -587,7 +587,6 @@ pheatmap(pamr_exp.3, color=my_palette, fontsize_row =6, border_color = NA, famil
          treeheight_row = 8, cluster_cols = F, legend = T, show_colnames=F,
          annotation_col = meta, annotation_colors=ann_colors)
 dev.off()
-
 
 
 ####################################### Figure 6B ##########################
@@ -643,12 +642,12 @@ k <- ggsurvplot(survfit(recsurv.2~perc.BM_Clust.4.4, data = stage2CRC),size = 0.
                 pval = F,
                 conf.int = F,xlab="Time (years)",legend = c(0.5,0.42),
                 ggtheme = theme(axis.title = element_text(size = 12, family = "Arial"),
-                                axis.text = element_text(size = 6),
-                                panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(),
-                                panel.border = element_blank(), axis.line = element_line(), legend.key = element_rect(fill = NA), 
-                                legend.text = element_text(size = 6.1),legend.key.width = unit(0.5, "mm"), legend.margin=margin(2,0,0,0),
-                                legend.box.margin=margin(-7,-10,-10,-10), 
-                                plot.margin = margin(0, 0, 0, 0.1, "cm")),
+                axis.text = element_text(size = 6),
+                panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(),
+                panel.border = element_blank(), axis.line = element_line(), legend.key = element_rect(fill = NA), 
+                legend.text = element_text(size = 6.1),legend.key.width = unit(0.5, "mm"), legend.margin=margin(2,0,0,0),
+                legend.box.margin=margin(-7,-10,-10,-10), 
+                plot.margin = margin(0, 0, 0, 0.1, "cm")),
                 risk.table.y.text.col = T,
                 risk.table.y.text = F,
                 risk.table.height = 0.1,
@@ -730,7 +729,7 @@ fgsea(H_list_mus, stats = gene_list , 1000, minSize = 1, maxSize = Inf, nproc = 
 # tgfb
 tiff("Fig.6F_tgfb_hallmark.tiff", units="mm", width=55, height=40, res=300)
 plotEnrichment(H_list_mus[["HALLMARK_TGF_BETA_SIGNALING"]], gene_list, gseaParam = 1, ticksSize = 0.1)+labs(title="HALLMARK_TGFB")+labs(y = "Enrichment scores")+
-  theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
+        theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
         axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
         panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
 grid.text(label = "NES = 2.28 \npadj = 0.01", gp = gpar(fontsize = 8), x = unit(0.8, "npc"), y = unit(0.68, "npc"))
@@ -758,7 +757,7 @@ fgsea(cris, stats = ensemble_list , 1000, minSize = 1, maxSize = Inf, nproc = 0,
 ## plot crisA
 tiff("Extended Data Figure 7d_crisA.tiff", units="mm", width=55, height=40, res=300)
 plotEnrichment(pathways[["CRIS_A"]], gene_list, gseaParam = 1, ticksSize = 0.1)+labs(title="CRIS-A signature")+labs(y = "Enrichment scores")+
-  theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
+        theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
         axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
         panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
 grid.text(label = "NES = 1.43 \npadj = 0.01", gp = gpar(fontsize = 8), x = unit(0.8, "npc"), y = unit(0.68, "npc"))
@@ -769,7 +768,7 @@ dev.off()
 ## plot crisB
 tiff("Fig.6G_crisB.tiff", units="mm", width=55, height=40, res=300)
 plotEnrichment(pathways[["CRIS_B"]], gene_list, gseaParam = 1, ticksSize = 0.1)+labs(title="CRIS-B signature")+labs(y = "Enrichment scores")+
-  theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
+        theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
         axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
         panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
 grid.text(label = "NES = 1.87 \npadj = 0.01", gp = gpar(fontsize = 8), x = unit(0.8, "npc"), y = unit(0.68, "npc"))
@@ -796,7 +795,7 @@ fgsea(cms, stats = ensemble_list , 1000, minSize = 1, maxSize = Inf, nproc = 0, 
 ## plot CMS1
 tiff("Extended Data Figure 7d_CMS1.tiff", units="mm", width=55, height=40, res=300)
 plotEnrichment(cms[["CMS1"]], gene_list, gseaParam = 1, ticksSize = 0.1)+labs(title="CMS1 signature")+labs(y = "Enrichment scores")+
-  theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
+        theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
         axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
         panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
 grid.text(label = "NES = 1.68 \npadj = 0.01", gp = gpar(fontsize = 8), x = unit(0.8, "npc"), y = unit(0.68, "npc"))
@@ -808,7 +807,7 @@ dev.off()
 ## plot CMS2
 tiff("Extended Data Figure 7d_CMS2.tiff", units="mm", width=55, height=40, res=300)
 plotEnrichment(cms[["CMS2"]], gene_list, gseaParam = 1, ticksSize = 0.1)+labs(title="CMS2 signature")+labs(y = "Enrichment scores")+
-  theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
+        theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
         axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
         panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
 grid.text(label = "NES = -1.25 \npadj = 0.28", gp = gpar(fontsize = 8), x = unit(0.42, "npc"), y = unit(0.25, "npc"))
@@ -880,7 +879,6 @@ p_crisB <- ggplot(t_ssgsea_crisB.2, aes(x = Type, y =  V4))+
     axis.title.x=element_blank(), 
     #plot.title = element_text(hjust = 0.5, face = "bold"),
     axis.title.y = element_text(size = 14, family = "Helvetica"),
-    #axis.text.x = element_text(size = 11, family = "Helvetica", angle = 45, margin = margin(t = 25, r = 20, b = 0, l = 0)),
     axis.text.x = element_blank(), axis.ticks.x = element_blank(), 
     axis.line = element_blank(),
     panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -941,17 +939,17 @@ p_crisB <- ggplot(t_ssgsea_crisB.3, aes(x = Type, y =  V4))+
   labs(y = "CRIS.B / ssGSEA score")+geom_hline(aes(yintercept=0), linetype="dotted")+
   #scale_y_continuous(expand = c(0, 0), limits = c(0, 3))+
   theme_bw()+theme(
-    legend.title = element_blank(),
-    legend.position = c(0.71,0.70),
-    legend.text = element_text(margin = margin(r = 0.15, unit = "cm"), size=7.5),
-    legend.key.size = unit(0.13, "cm"),
-    legend.spacing.x = unit(0, 'cm'),
-    axis.title.x=element_blank(), 
-    axis.title.y = element_text(size = 14, family = "Helvetica"),
-    axis.text.x = element_blank(), axis.ticks.x = element_blank(), 
-    axis.line = element_blank(),
-    panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank())+
+  legend.title = element_blank(),
+  legend.position = c(0.71,0.70),
+  legend.text = element_text(margin = margin(r = 0.15, unit = "cm"), size=7.5),
+  legend.key.size = unit(0.13, "cm"),
+  legend.spacing.x = unit(0, 'cm'),
+  axis.title.x=element_blank(), 
+  axis.title.y = element_text(size = 14, family = "Helvetica"),
+  axis.text.x = element_blank(), axis.ticks.x = element_blank(), 
+  axis.line = element_blank(),
+  panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  panel.background = element_blank())+
   scale_color_manual(values = c('AKA_EGFRi'='#5fa171', 'AKA_AZD6244'='#a15da6', 'AKA' = '#bac1c2'))
 #geom_text_repel()+
 
