@@ -236,8 +236,8 @@ tiff("Fig.1D_MTORC1.tiff", units="mm", width=55, height=40, res=300)
 plotEnrichment(all_genesets[["HALLMARK_MTORC1_SIGNALING"]], gene_list, gseaParam = 1, ticksSize = 0.1)+labs(title="HALLMARK_MTORC1")+
   labs(y = "Enrichment scores")+
   theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
-        axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
-        panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
+  axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
+  panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
 grid.text(label = "NES = 2.26\npadj = 0.002", gp = gpar(fontsize = 8), x = unit(0.8, "npc"), y = unit(0.68, "npc"))
 grid.text(label = "Relapse", gp = gpar(fontsize = 8), x = unit(0.3, "npc"), y = unit(0.04, "npc"))
 grid.text(label = "non-Relapse", gp = gpar(fontsize = 8), x = unit(0.85, "npc"), y = unit(0.04, "npc"))
@@ -597,7 +597,8 @@ classifier_re <- matrix(c(1, 9, 13, 4),
 test_res <- fisher.test(classifier_re)
 
 ## convert the number to percent
-df <- data.frame(label = c("WT-like", "Alk5-like", "WT-like", "Alk5-like"), type = c("Relapse", "Relapse", "non-Relapse", "non-Relapse"), value = c(10, 90, 76.5, 23.5))
+df <- data.frame(label = c("WT-like", "Alk5-like", "WT-like", "Alk5-like"), 
+                 type = c("Relapse", "Relapse", "non-Relapse", "non-Relapse"), value = c(10, 90, 76.5, 23.5))
 
 ### plot
 tiff("Figure 6B.tiff", units="mm", width=41, height=42, res=300)
@@ -703,8 +704,8 @@ fgsea(fessler, stats = ensemble_list , 1000, minSize = 1, maxSize = Inf, nproc =
 tiff("Fig.6E_fessler.tiff", units="mm", width=55, height=40, res=300)
 plotEnrichment(fessler[["TGFB_UP"]], gene_list, gseaParam = 1, ticksSize = 0.1)+labs(title="TGFB_UP")+labs(y = "Enrichment scores")+
   theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
-        axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
-        panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
+  axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
+  panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
 grid.text(label = "NES = 1.98 \npadj = 0.01", gp = gpar(fontsize = 8), x = unit(0.8, "npc"), y = unit(0.68, "npc"))
 grid.text(label = "Fessler et al. 2016", gp = gpar(fontsize = 8, fontfamily = "Arial"), x = unit(0.6, "npc"), y = unit(0.82, "npc"))
 grid.text(label = "AKACa", gp = gpar(fontsize = 8), x = unit(0.3, "npc"), y = unit(0.04, "npc"))
