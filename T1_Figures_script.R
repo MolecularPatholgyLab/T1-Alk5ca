@@ -7,26 +7,24 @@
 ####################################################################################################################################################
 ###############################################################################################
 #                                                                                             #
-# Figure 1A : Lines 88 to 128                                                                 #
-# Figure 1B : Lines 135 to 157                                                                #
-# Figure 1C : Lines 161 to 215                                                                #
-# Figure 1D, E, G  & Extended Data Figure 1C : Lines 219 to 250                               #
-# Figure 1F : Lines 251 to 281                                                                #
-# Extended Data Figure 1A : Lines 288 to 315                                                  #
-# Extended Data Figure 1B : Lines 317 to 482                                                  #
-# Extended Data Figure 1D : Lines 485 to 561                                                  #
-# Figure 6A : Lines 568 to 594                                                                #
-# Figure 6B : Lines 598 to 624                                                                #
-# Figure 6D : Lines 628 to 683                                                                #
-# Figure 6E : Lines 687 to 717                                                                #
-# Figure 6F : Lines 723 to 748                                                                #
-# Figure 6G and Extended Data Figure 7d : Lines 752 to 826                                    #
-# Figure 6H : Lines 828 to 904                                                                #
-# Figure 6I : Lines 912 to 936                                                                #
-# Figure 7F : Lines 939 to 978                                                                #
-# Extended Data Figure 7A : Lines 985 to 1024                                                 #
-# Extended Data Figure 7B : Lines 1029 to 1065                                                #
-# Extended Data Figure 7C : Lines 1068 to 1102                                                #
+# Figure 1a : Lines 90 to 130                                                                 #
+# Figure 1b : Lines 135 to 157                                                                #
+# Figure 1c : Lines 163 to 212                                                                #
+# Figure 1d, E, G  & Extended Data Figure 1C : Lines 218 to 244                               #
+# Figure 1f : Lines 250 to 278                                                                #
+# Extended Data Figure 1a : Lines 288 to 312                                                  #
+# Extended Data Figure 1b : Lines 317 to 487                                                  #
+# Extended Data Figure 1d : Lines 485 to 561                                                  #
+# Figure 6a : Lines 584 to 609                                                                #
+# Figure 6b : Lines 614 to 639                                                                #
+# Figure 6d : Lines 645 to 700                                                                #
+# Figure 6e  & f & g & Extended Data Figure 7d : Lines 703 to 717                             #
+# Figure 6h : Lines 720 to 738                                                                #
+# Figure 6i : Lines 798 to 819                                                                #
+# Figure 7f : Lines 824 to 861                                                                #
+# Extended Data Figure 7a : Lines 870 to 909                                                  #
+# Extended Data Figure 7b : Lines 912 to 948                                                  #
+# Extended Data Figure 7c : Lines 953 to 985                                                  #
 
 
 ###############################################################################################
@@ -85,7 +83,7 @@ MCP$group <- meta$group
 ########################################################### Figure 1 ############################################################################
 ####################################################################################################################################################
 
-################################### Figure 1A #############################################
+################################### Figure 1a #############################################
 
 ## wilcox.test to test significant differencce of fibroblast population between relapse and non-relapse group 
 wilcox.test(MCP[MCP$group=="Relapse","Fibroblasts"], MCP[MCP$group=="Non-Relapse","Fibroblasts"])
@@ -129,7 +127,7 @@ dev.off()
 
 
 
-################################### Figure 1B #############################################
+################################### Figure 1b #############################################
 
 ## read QuPath score
 QuPath <- read.delim("T1_cohort/scort id paired with stroma and tumour epithelium scores.txt")
@@ -158,7 +156,7 @@ dev.off()
 
 
 
-################################### Figure 1C #############################################
+################################### Figure 1c #############################################
 
 ## read T1 mutation profile
 mutationData_t1 <- read.delim("T1_cohort/T1_mutation_for.custom.csv", stringsAsFactors = F, sep = ",")
@@ -213,7 +211,7 @@ dev.off()
 
 
 
-################################# Figure 1D, E, G  & Extended Data Figure 1C  ######################
+################################# Figure 1d, e, g  & Extended Data Figure 1c  ######################
 
 ## read differentially expressed genes (relapse VS non-relapse)
 DEG <-read.delim("T1_cohort/DEGs_Relapse-Nonrelapse.txt")
@@ -245,7 +243,7 @@ dev.off()
 
 
 
-########################################### Figure 1F ###########################################
+########################################### Figure 1f ###########################################
 
 ### Get Hallmark genesete from msigdb
 H.df <- msigdbr(species = "Homo sapiens", category = "H")
@@ -282,7 +280,7 @@ dev.off()
 #########################################################  Extended Data Figure 1  ####################################################################
 #######################################################################################################################################################
 
-####################################### Extended Data Figure 1A ##########################
+####################################### Extended Data Figure 1a ##########################
 
 ## read the T1 normalized data 
 exp <- read.delim("T1_cohort/T1_normalized.txt")
@@ -311,7 +309,7 @@ p=ggplot(pcr, aes(PC1, PC2, color = Group)) + geom_point(size=0.65)+labs(x='PC1=
 p+scale_color_manual(values = c('Relapse' = '#ff4242', 'Non-Relapse' = '#1f1fd8'))
 dev.off()
 
-####################################### Extended Data Figure 1B ##########################
+####################################### Extended Data Figure 1b ##########################
 
 ## read CRIS classification result
 cris <- read.delim("T1_cohort/CRIS_predictions.txt")
@@ -478,48 +476,67 @@ pie + theme_classic() + theme(axis.line = element_blank(),
 dev.off()
 
 
-####################################### Extended Data Figure 1D ##########################
-
+####################################### Extended Data Figure 1d ##########################
 ## read FOCUS data
-exp <- read.csv("FOCUS_cohort/scort_data_ws2_expression_mean_per_gene_v1.3.csv")
-sum(duplicated(exp$Gene))
-#exp[exp$Gene=="Mar-01",]
-exp <- exp[!duplicated(exp$Gene),]
-rownames(exp) <- NULL
-##
-exp.2 <- column_to_rownames(exp, var = "Gene")
-head(exp.2[1:5])
+focus <- read.delim("Sid/FOCUS/GSE156915_series_matrix.txt", skip = 69)
+focus[1:10,1:10]
+focus.1 <- column_to_rownames(focus, var = "ID_REF")
+focus.1[1:50,1:5]
+dim(focus.1)
+
+## retrieve sample ids
+sample_id <- read.delim("Sid/FOCUS/GSE156915_series_matrix.txt", skip = 27, nrows = 1)
+head(sample_id[1:5])
+sample_id.1 <-as.data.frame(t(sample_id))
+sample_id.1 <- rownames_to_column(sample_id.1, var = 'scort_id')
+dim(sample_id.1)
+sample_id.2 <- sample_id.1[-1,]
+
+## check if samples in main focus file and sample_id file are in the same order
+all(colnames(focus.1)==sample_id.2$V1)
+
+#### replace colnames of focus file with sample id
+focus.1.copy <- focus.1
+colnames(focus.1.copy) <- sample_id.2$scort_id
+focus.1.copy[1:10,1:10]
+dim(focus.1.copy)
 
 ## read meta data
-meta <- read.csv("FOCUS_cohort/clin.csv")
+meta <- read.csv("2021/Projects/T1_Alk5ca/Final_scripts_data/FOCUS_cohort/clin.csv")
 meta.2 <- column_to_rownames(meta, var = "Sample_ID")
-
+dim(meta.2)
 ###### only get part of meta data which have have expression value for that
-meta.3 <- meta.2[colnames(exp.2),]
+meta.3 <- meta.2[colnames(focus.1.copy),]
 dim(meta.3)
 
 #### check if the samples in meta and expression file are in the same order
-all(rownames(meta.3)==colnames(exp.2))
+all(rownames(meta.3)==colnames(focus.1.copy))
+
+
+### Get Hallmark genesete from msigdb
+H.df <- msigdbr(species = "Homo sapiens", category = "H")
+H_list <- H.df %>% split(x = .$gene_symbol, f = .$gs_name)
 
 ### ssGSEA --- GSVA
 set.seed(124)
-ssgsea_focus <- gsva(as.matrix(exp.2), H_list, ssgsea.norm=T,
+ssgsea_focus <- gsva(as.matrix(focus.1.copy), H_list, ssgsea.norm=T,
                      min.sz=1, max.sz=Inf, verbose = T, method = 'ssgsea')
 
 t_ssgsea_focus <- as.data.frame(t(ssgsea_focus))
 t_ssgsea_focus <- rownames_to_column(t_ssgsea_focus, var = "sample_ID")
 
 ### MCP
-MCP_FOCUS <- MCPcounter.estimate(exp.2,featuresType="HUGO_symbols",
-             probesets=read.table(curl("http://raw.githubusercontent.com/ebecht/MCPcounter/master/Signatures/probesets.txt"),sep="\t",colClasses="character"),
-             genes=read.table(curl("http://raw.githubusercontent.com/ebecht/MCPcounter/master/Signatures/genes.txt"),sep="\t",header=TRUE,colClasses="character",check.names=FALSE))
+MCP_FOCUS <- MCPcounter.estimate(focus.1.copy,featuresType="HUGO_symbols",
+             probesets=read.table(curl("http://raw.githubusercontent.com/ebecht/MCPcounter/master/Signatures/probesets.txt"),sep="\t",stringsAsFactors=FALSE,colClasses="character"),
+             genes=read.table(curl("http://raw.githubusercontent.com/ebecht/MCPcounter/master/Signatures/genes.txt"),sep="\t",stringsAsFactors=FALSE,header=TRUE,colClasses="character",check.names=FALSE))
 
-MCP_FOCUS[1:5]
+MCP_FOCUS[1:5,1:5]
 
 ##
 t_MCP_FOCUS <-as.data.frame(t(MCP_FOCUS))
 t_MCP_FOCUS <- rownames_to_column(t_MCP_FOCUS, var = "sample_ID")
 dim(t_MCP_FOCUS)
+
 
 ################################# JOIN fibroblast, Cytotoxic lymphocytes and TGFb scores in one file
 df <- join(t_ssgsea_focus[,c(1,45)], t_MCP_FOCUS[, c(1,4,11)], by="sample_ID", type="inner")
@@ -561,7 +578,7 @@ dev.off()
 #######################################################################  Figure 6 ####################################################################
 ######################################################################################################################################################
 
-####################################### Figure 6A ##########################
+####################################### Figure 6a ##########################
 # read the gene list obtained from PAMR
 pamr_output <- read.csv("mouse_models/PAMR_result/Alk5_GeneSignature_pamr_thres.4.98.csv")
 # read the expression profile of Alk5ca_WT mouse models
@@ -590,15 +607,15 @@ pheatmap(pamr_exp.3, color=my_palette, fontsize_row =6, border_color = NA, famil
 dev.off()
 
 
-####################################### Figure 6B ##########################
+####################################### Figure 6b ##########################
 
-classifier_re <- matrix(c(1, 9, 13, 4),
+classifier_re <- matrix(c(1, 9, 12, 5),
                         nrow = 2, dimnames = list( c("WT", "Alk5"),c("Relapse", "nonRelapse")))
 test_res <- fisher.test(classifier_re)
 
 ## convert the number to percent
-df <- data.frame(label = c("WT-like", "Alk5-like", "WT-like", "Alk5-like"), 
-                 type = c("Relapse", "Relapse", "non-Relapse", "non-Relapse"), value = c(10, 90, 76.5, 23.5))
+df <- data.frame(label = c("WT-like", "Alk5-like", "WT-like", "Alk5-like"), type = c("Relapse", "Relapse", "non-Relapse", "non-Relapse"),
+                 value = c(10, 90, 70.6, 29.4))
 
 ### plot
 tiff("Figure 6B.tiff", units="mm", width=41, height=42, res=300)
@@ -621,7 +638,7 @@ dev.off()
 
 
 
-####################################### Figure 6D ##########################
+####################################### Figure 6d ##########################
 
 stage2CRC <- read.delim("stageII_CRC_Sanghee/patient.4clusters_2.csv", sep = ",")
 stage2CRC <- stage2CRC[,-c(2:9,11)]
@@ -679,145 +696,26 @@ stage2CRC %>%
   analyse_survival(vars(Time, Rec.Status), by=perc.BM_Clust.4.4) -> resultCRC #store the result object for later use
 
 
+####################################### Fig 6e  & f & g & Extended Data Figure 7d ###################################
 
-####################################### Figure 6E ##########################
-
-#### read DEGs of AKA vs WT mouse models
-dif <- read.delim("mouse_models/shrunkenLogFC_AKA_WT.csv", sep = ",")
+#### read collapsed DEGs
+dif <- read.delim("2021/Projects/T1_Alk5ca/Final_scripts_data/Alk5/data/shrunkenLogFC_AKA_WT.csv", sep = ",")
 head(dif)
-## make a ranked list of ENSEMBL_IDs based on Shrunken log2 foldchanges (LFC)
-gene_list <- as.vector(dif$log2FoldChange)
-names(gene_list) <- dif$ENSEMBL_ID
-ensemble_list <- sort(gene_list, decreasing = T)
-head(ensemble_list)
-
-##### Fessler mouse signature with Ensemble IDs
-fessler <- read.delim("mouse_models/FESSLER_2016_Ensembl_ID_TGFB_UP_2.gmt", sep = "\t", header = T)
-fessler <- t(fessler)
-## convert the fessler signature to 'list' file
-fessler <- list(TGFB_UP = as.character(row.names(fessler)))
-## apply fgsea to do pre-ranked GSEA
-set.seed(127)
-fgsea(fessler, stats = ensemble_list , 1000, minSize = 1, maxSize = Inf, nproc = 0, gseaParam = 1, BPPARAM = NULL)
-
-# fessler
-tiff("Fig.6E_fessler.tiff", units="mm", width=55, height=40, res=300)
-plotEnrichment(fessler[["TGFB_UP"]], gene_list, gseaParam = 1, ticksSize = 0.1)+labs(title="TGFB_UP")+labs(y = "Enrichment scores")+
-  theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
-  axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
-  panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
-grid.text(label = "NES = 1.98 \npadj = 0.01", gp = gpar(fontsize = 8), x = unit(0.8, "npc"), y = unit(0.68, "npc"))
-grid.text(label = "Fessler et al. 2016", gp = gpar(fontsize = 8, fontfamily = "Arial"), x = unit(0.6, "npc"), y = unit(0.82, "npc"))
-grid.text(label = "AKACa", gp = gpar(fontsize = 8), x = unit(0.3, "npc"), y = unit(0.04, "npc"))
-grid.text(label = "WT", gp = gpar(fontsize = 8), x = unit(0.85, "npc"), y = unit(0.04, "npc"))
-dev.off()
-
-####################################### Figure 6F ##########################
-
-## make a ranked list of gene symbols based on Shrunken log2 foldchanges (LFC)
+dim(dif)
+##
 gene_list <- as.vector(dif$log2FoldChange)
 names(gene_list) <- dif$Gene_Symbol
 gene_list <- sort(gene_list, decreasing = T)
-head(gene_list)
 
-### Get Hallmark genesets from msigdb
-H.mus <- msigdbr(species = "Mus musculus", category = "H")
-H_list_mus <- H.mus %>% split(x = .$gene_symbol, f = .$gs_name)  ## 7526
+##### load all genesets
+load("2022/T1_Final_data/Mice/all_genesets_mice.Rdata") #all_genesets_mice
+####### Preranked GSEA usinf fgsea
 
-## apply fgsea to do pre-ranked GSEA
 set.seed(127)
-fgsea(H_list_mus, stats = gene_list , 1000, minSize = 1, maxSize = Inf, nproc = 0, gseaParam = 1, BPPARAM = NULL)
-
-# tgfb
-tiff("Fig.6F_tgfb_hallmark.tiff", units="mm", width=55, height=40, res=300)
-plotEnrichment(H_list_mus[["HALLMARK_TGF_BETA_SIGNALING"]], gene_list, gseaParam = 1, ticksSize = 0.1)+labs(title="HALLMARK_TGFB")+labs(y = "Enrichment scores")+
-        theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
-        axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
-        panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
-grid.text(label = "NES = 2.28 \npadj = 0.01", gp = gpar(fontsize = 8), x = unit(0.8, "npc"), y = unit(0.68, "npc"))
-grid.text(label = "AKACa", gp = gpar(fontsize = 8), x = unit(0.3, "npc"), y = unit(0.04, "npc"))
-grid.text(label = "WT", gp = gpar(fontsize = 8), x = unit(0.85, "npc"), y = unit(0.04, "npc"))
-dev.off()
+fgsea_re <- fgsea(all_genesets_mice, stats = gene_list , 1000, minSize = 1, maxSize = Inf, nproc = 0, gseaParam = 1, BPPARAM = NULL)
 
 
-
-####################################### Figure 6G and Extended Data Figure 7d ##########################
-
-## Read mouse CRIS template
-load("mouse_models/Mouse_Ensembl_ID_CRIS_NTP_template.Rdata") #template_CRIS
-## convert template_CRIS to 'list' file
-cris <- list(CRIS_A = template_CRIS[template_CRIS$class=="CRIS-A",2], 
-             CRIS_B = template_CRIS[template_CRIS$class=="CRIS-B",2], 
-             CRIS_C = template_CRIS[template_CRIS$class=="CRIS-C",2], 
-             CRIS_D = template_CRIS[template_CRIS$class=="CRIS-D",2], 
-             CRIS_E = template_CRIS[template_CRIS$class=="CRIS-E",2])
-
-## apply fgsea to do pre-ranked GSEA
-set.seed(127)
-fgsea(cris, stats = ensemble_list , 1000, minSize = 1, maxSize = Inf, nproc = 0, gseaParam = 1, BPPARAM = NULL)
-
-## plot crisA
-tiff("Extended Data Figure 7d_crisA.tiff", units="mm", width=55, height=40, res=300)
-plotEnrichment(pathways[["CRIS_A"]], gene_list, gseaParam = 1, ticksSize = 0.1)+labs(title="CRIS-A signature")+labs(y = "Enrichment scores")+
-        theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
-        axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
-        panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
-grid.text(label = "NES = 1.43 \npadj = 0.01", gp = gpar(fontsize = 8), x = unit(0.8, "npc"), y = unit(0.68, "npc"))
-grid.text(label = "AKACa", gp = gpar(fontsize = 8), x = unit(0.3, "npc"), y = unit(0.04, "npc"))
-grid.text(label = "WT", gp = gpar(fontsize = 8), x = unit(0.85, "npc"), y = unit(0.04, "npc"))
-dev.off()
-
-## plot crisB
-tiff("Fig.6G_crisB.tiff", units="mm", width=55, height=40, res=300)
-plotEnrichment(pathways[["CRIS_B"]], gene_list, gseaParam = 1, ticksSize = 0.1)+labs(title="CRIS-B signature")+labs(y = "Enrichment scores")+
-        theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
-        axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
-        panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
-grid.text(label = "NES = 1.87 \npadj = 0.01", gp = gpar(fontsize = 8), x = unit(0.8, "npc"), y = unit(0.68, "npc"))
-grid.text(label = "AKACa", gp = gpar(fontsize = 8), x = unit(0.3, "npc"), y = unit(0.04, "npc"))
-grid.text(label = "WT", gp = gpar(fontsize = 8), x = unit(0.85, "npc"), y = unit(0.04, "npc"))
-dev.off()
-
-
-########## CMS
-## Read mouse CMS template
-load("mouse_models/Mouse_Ensembl_ID_CMS_NTP_template.Rdata") # template_CMS
-
-## convert template_CMS to 'list' file
-cms <- list(CMS1 = template_CMS[template_CMS$class=="CMS1",2], 
-            CMS2 = template_CMS[template_CMS$class=="CMS2",2], 
-            CMS3 = template_CMS[template_CMS$class=="CMS3",2], 
-            CMS4 = template_CMS[template_CMS$class=="CMS4",2])
-
-## apply fgsea to do pre-ranked GSEA
-set.seed(124)
-fgsea(cms, stats = ensemble_list , 1000, minSize = 1, maxSize = Inf, nproc = 0, gseaParam = 1, BPPARAM = NULL)
-
-
-## plot CMS1
-tiff("Extended Data Figure 7d_CMS1.tiff", units="mm", width=55, height=40, res=300)
-plotEnrichment(cms[["CMS1"]], gene_list, gseaParam = 1, ticksSize = 0.1)+labs(title="CMS1 signature")+labs(y = "Enrichment scores")+
-        theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
-        axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
-        panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
-grid.text(label = "NES = 1.68 \npadj = 0.01", gp = gpar(fontsize = 8), x = unit(0.8, "npc"), y = unit(0.68, "npc"))
-grid.text(label = "AKACa", gp = gpar(fontsize = 8), x = unit(0.3, "npc"), y = unit(0.04, "npc"))
-grid.text(label = "WT", gp = gpar(fontsize = 8), x = unit(0.85, "npc"), y = unit(0.04, "npc"))
-dev.off()
-
-
-## plot CMS2
-tiff("Extended Data Figure 7d_CMS2.tiff", units="mm", width=55, height=40, res=300)
-plotEnrichment(cms[["CMS2"]], gene_list, gseaParam = 1, ticksSize = 0.1)+labs(title="CMS2 signature")+labs(y = "Enrichment scores")+
-        theme(plot.title = element_text(hjust = 0.5, family = "Arial", size = 12), panel.background = element_blank(), 
-        axis.title.y = element_text(size = 12, family = "Arial"),axis.text.y = element_text(size = 8, family = "Arial"),
-        panel.border = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank())
-grid.text(label = "NES = -1.25 \npadj = 0.28", gp = gpar(fontsize = 8), x = unit(0.42, "npc"), y = unit(0.25, "npc"))
-grid.text(label = "AKACa", gp = gpar(fontsize = 8), x = unit(0.3, "npc"), y = unit(0.04, "npc"))
-grid.text(label = "WT", gp = gpar(fontsize = 8), x = unit(0.85, "npc"), y = unit(0.04, "npc"))
-dev.off()
-
-####################################### Figure 6H #############################
+####################################### Figure 6h #############################
 
 ## read mouse normalized data
 df <- read.csv("mouse_models/normalized_all_models.csv")
@@ -895,7 +793,7 @@ p_crisB+geom_signif(comparisons = list(c("AKA", "AK"), c("AKA", "AKAlk5KO")),
 dev.off()
 
 
-####################################### Figure 6I #############################
+####################################### Figure 6i #############################
 
 selected_genes <- df.2[c("Snai3", "Cbl", "Mycl", "Itgb6", "Vegfa", "Egfr", "Itgav", "Tgfbr1", "Mycn", "Fos", "Smurf1", 
                          "Cblb", "Skil", "Map3k13", "Smad7", "Pdgfb", "Mycbp2", "Ret"),]
@@ -921,7 +819,7 @@ pheatmap(selected_genes_scaled, angle_col = "45", color=my_palette, fontsize_row
 dev.off()
 
 
-####################################### Figure 7F #############################
+####################################### Figure 7f #############################
 
 ##### only keep AK, AKA, AKAlk5ca from 't_ssgsea_crisB' file
 t_ssgsea_crisB.3 <- t_ssgsea_crisB[which(t_ssgsea_crisB$Type %in% c("AKA_AZD6244", "AKA", "AKA_EGFRi")),]
@@ -967,7 +865,7 @@ dev.off()
 ##################################################### Extended Data Figure 7 ########################################################################
 #####################################################################################################################################################
 
-################################### Extended Data Figure 7A #########################
+################################### Extended Data Figure 7a #########################
 
 stage2.cell <- read.csv("stageII_CRC_Sanghee/CellData_Standardized_stage2.csv")
 
@@ -1009,7 +907,7 @@ heatmap.2(as.matrix(df.median),
 dev.off()
 
 
-################################### Extended Data Figure 7B #########################
+################################### Extended Data Figure 7b #########################
 
 stage2CRC <- read.delim("stageII_CRC_Sanghee/patient.4clusters_2.csv", sep = ",", stringsAsFactors = F)
 dim(stage2CRC)
@@ -1050,7 +948,7 @@ heatmap.2(as.matrix(stage2.heat),
 dev.off()
 
 
-################################### Extended Data Figure 7C #########################
+################################### Extended Data Figure 7c #########################
 
 stage2.cell_1 <- stage2.cell[,-c(1:5)]
 head(stage2.cell_1)
@@ -1095,55 +993,59 @@ dev.off()
 sessionInfo()
 
 ##########-------------------------------------------------------------------------------------
-R version 3.6.3 (2020-02-29)
+R version 4.1.2 (2021-11-01)
 Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: Ubuntu 18.04.3 LTS
+Running under: Ubuntu 18.04.6 LTS
 
 Matrix products: default
 BLAS:   /usr/lib/x86_64-linux-gnu/openblas/libblas.so.3
 LAPACK: /usr/lib/x86_64-linux-gnu/libopenblasp-r0.2.20.so
 
 locale:
-  [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C               LC_TIME=en_GB.UTF-8        LC_COLLATE=en_GB.UTF-8     LC_MONETARY=en_GB.UTF-8   
-[6] LC_MESSAGES=en_GB.UTF-8    LC_PAPER=en_GB.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C            
+ [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C               LC_TIME=en_GB.UTF-8        LC_COLLATE=en_GB.UTF-8     LC_MONETARY=en_GB.UTF-8   
+ [6] LC_MESSAGES=en_GB.UTF-8    LC_PAPER=en_GB.UTF-8       LC_NAME=C                  LC_ADDRESS=C               LC_TELEPHONE=C            
 [11] LC_MEASUREMENT=en_GB.UTF-8 LC_IDENTIFICATION=C       
 
 attached base packages:
-  [1] grid      stats     graphics  grDevices utils     datasets  methods   base     
+[1] grid      stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-  [1] gplots_3.1.1           RColorBrewer_1.1-2     reshape_0.8.8          biomaRt_2.40.5         gridExtra_2.3          DEGreport_1.20.0      
-[7] pheatmap_1.0.12        dplyr_1.0.5            plyr_1.8.6             tibble_3.1.1           msigdbr_7.2.1          GSVA_1.32.0           
-[13] fgsea_1.10.1           Rcpp_1.0.6             magrittr_2.0.1         survivalAnalysis_0.1.3 survminer_0.4.9        survival_3.2-10       
-[19] ggsignif_0.6.1         ggpubr_0.4.0           MCPcounter_1.1.0       curl_4.3               ggbeeswarm_0.6.0       ggplot2_3.3.3         
+ [1] forcats_0.5.1          stringr_1.4.0          purrr_0.3.4            readr_2.1.1            tidyr_1.1.4           
+ [6] tidyverse_1.3.1        data.table_1.14.2      gplots_3.1.1           RColorBrewer_1.1-2     reshape_0.8.8         
+[11] biomaRt_2.48.3         gridExtra_2.3          pheatmap_1.0.12        dplyr_1.0.7            plyr_1.8.6            
+[16] tibble_3.1.6           msigdbr_7.4.1          GSVA_1.40.1            fgsea_1.18.0           magrittr_2.0.1        
+[21] survivalAnalysis_0.2.0 survminer_0.4.9        survival_3.2-13        ggsignif_0.6.3         ggpubr_0.4.0          
+[26] MCPcounter_1.2.0       curl_4.3.2             ggbeeswarm_0.6.0       ggplot2_3.3.5         
 
 loaded via a namespace (and not attached):
-  [1] readxl_1.3.1                backports_1.2.1             circlize_0.4.12             Hmisc_4.5-0                 fastmatch_1.1-0            
-[6] ConsensusClusterPlus_1.48.0 GSEABase_1.46.0             splines_3.6.3               BiocParallel_1.18.1         GenomeInfoDb_1.20.0        
-[11] digest_0.6.27               htmltools_0.5.1.1           fansi_0.4.2                 checkmate_2.0.0             memoise_2.0.0              
-[16] cluster_2.1.0               openxlsx_4.2.3              limma_3.40.6                ComplexHeatmap_2.0.0        annotate_1.62.0            
-[21] Nozzle.R1_1.1-1             matrixStats_0.58.0          prettyunits_1.1.1           jpeg_0.1-8.1                colorspace_2.0-0           
-[26] blob_1.2.1                  ggrepel_0.9.1               haven_2.4.0                 xfun_0.22                   crayon_1.4.1               
-[31] RCurl_1.98-1.3              graph_1.62.0                genefilter_1.66.0           zoo_1.8-9                   glue_1.4.2                 
-[36] gtable_0.3.0                zlibbioc_1.30.0             XVector_0.24.0              GetoptLong_1.0.5            DelayedArray_0.10.0        
-[41] car_3.0-10                  shape_1.4.5                 BiocGenerics_0.30.0         abind_1.4-5                 scales_1.1.1               
-[46] DBI_1.1.1                   edgeR_3.26.8                rstatix_0.7.0               progress_1.2.2              xtable_1.8-4               
-[51] lasso2_1.2-20               htmlTable_2.1.0             tmvnsim_1.0-2               clue_0.3-59                 foreign_0.8-72             
-[56] bit_4.0.4                   km.ci_0.5-2                 Formula_1.2-4               stats4_3.6.3                httr_1.4.2                 
-[61] htmlwidgets_1.5.3           ellipsis_0.3.1              farver_2.1.0                pkgconfig_2.0.3             XML_3.99-0.3               
-[66] nnet_7.3-12                 locfit_1.5-9.4              utf8_1.2.1                  labeling_0.4.2              tidyselect_1.1.0           
-[71] rlang_0.4.10                later_1.1.0.1               AnnotationDbi_1.46.1        munsell_0.5.0               cellranger_1.1.0           
-[76] tools_3.6.3                 cachem_1.0.4                generics_0.1.0              RSQLite_2.2.7               broom_0.7.6                
-[81] ggdendro_0.1.22             stringr_1.4.0               fastmap_1.1.0               yaml_2.2.1                  knitr_1.32                 
-[86] bit64_4.0.5                 zip_2.1.1                   caTools_1.18.2              survMisc_0.5.5              purrr_0.3.4                
-[91] nlme_3.1-141                mime_0.10                   rstudioapi_0.13             compiler_3.6.3              shinythemes_1.2.0          
-[96] beeswarm_0.3.1              png_0.1-7                   geneplotter_1.62.0          stringi_1.5.3               forcats_0.5.1              
-[101] lattice_0.20-38             Matrix_1.2-17               psych_2.1.3                 KMsurv_0.1-5                vctrs_0.3.7                
-[106] pillar_1.6.0                lifecycle_1.0.0             tidytidbits_0.2.3           GlobalOptions_0.1.2         data.table_1.14.0          
-[111] cowplot_1.1.1               bitops_1.0-6                httpuv_1.5.5                GenomicRanges_1.36.1        R6_2.5.0                   
-[116] latticeExtra_0.6-29         promises_1.2.0.1            KernSmooth_2.23-15          rio_0.5.26                  vipor_0.4.5                
-[121] IRanges_2.18.3              gtools_3.8.2                MASS_7.3-51.4               assertthat_0.2.1            SummarizedExperiment_1.14.1
-[126] DESeq2_1.24.0               rjson_0.2.20                withr_2.4.2                 mnormt_2.0.2                S4Vectors_0.22.1           
-[131] GenomeInfoDbData_1.2.1      parallel_3.6.3              hms_1.0.0                   rpart_4.1-15                tidyr_1.1.3                
-[136] carData_3.0-4               logging_0.10-108            Biobase_2.44.0              shiny_1.6.0                 base64enc_0.1-3
-
+  [1] readxl_1.3.1                backports_1.4.1             fastmatch_1.1-3             BiocFileCache_2.0.0        
+  [5] GSEABase_1.54.0             splines_4.1.2               BiocParallel_1.26.2         GenomeInfoDb_1.28.4        
+  [9] digest_0.6.29               fansi_0.5.0                 memoise_2.0.1               ScaledMatrix_1.0.0         
+ [13] tzdb_0.2.0                  Biostrings_2.60.2           annotate_1.70.0             modelr_0.1.8               
+ [17] matrixStats_0.61.0          prettyunits_1.1.1           colorspace_2.0-2            rvest_1.0.2                
+ [21] blob_1.2.2                  rappdirs_0.3.3              haven_2.4.3                 xfun_0.28                  
+ [25] crayon_1.4.2                RCurl_1.98-1.5              jsonlite_1.7.2              graph_1.70.0               
+ [29] zoo_1.8-9                   glue_1.5.1                  gtable_0.3.0                zlibbioc_1.38.0            
+ [33] XVector_0.32.0              DelayedArray_0.18.0         car_3.0-12                  BiocSingular_1.8.1         
+ [37] Rhdf5lib_1.14.2             SingleCellExperiment_1.14.1 BiocGenerics_0.38.0         HDF5Array_1.20.0           
+ [41] abind_1.4-5                 scales_1.1.1                DBI_1.1.1                   rstatix_0.7.0              
+ [45] Rcpp_1.0.7                  xtable_1.8-4                progress_1.2.2              gridtext_0.1.4             
+ [49] bit_4.0.4                   rsvd_1.0.5                  km.ci_0.5-2                 stats4_4.1.2               
+ [53] httr_1.4.2                  ellipsis_0.3.2              pkgconfig_2.0.3             XML_3.99-0.8               
+ [57] farver_2.1.0                dbplyr_2.1.1                utf8_1.2.2                  tidyselect_1.1.1           
+ [61] labeling_0.4.2              rlang_0.4.12                AnnotationDbi_1.54.1        cellranger_1.1.0           
+ [65] munsell_0.5.0               tools_4.1.2                 cachem_1.0.6                cli_3.1.0                  
+ [69] generics_0.1.1              RSQLite_2.2.9               broom_0.7.10                fastmap_1.1.0              
+ [73] fs_1.5.2                    babelgene_21.4              knitr_1.36                  bit64_4.0.5                
+ [77] survMisc_0.5.5              caTools_1.18.2              KEGGREST_1.32.0             sparseMatrixStats_1.4.2    
+ [81] xml2_1.3.3                  compiler_4.1.2              rstudioapi_0.13             beeswarm_0.4.0             
+ [85] filelock_1.0.2              png_0.1-7                   reprex_2.0.1                stringi_1.7.6              
+ [89] lattice_0.20-45             Matrix_1.3-4                markdown_1.1                KMsurv_0.1-5               
+ [93] vctrs_0.3.8                 pillar_1.6.4                lifecycle_1.0.1             rhdf5filters_1.4.0         
+ [97] tidytidbits_0.2.3           cowplot_1.1.1               bitops_1.0-7                irlba_2.3.5                
+[101] GenomicRanges_1.44.0        R6_2.5.1                    KernSmooth_2.23-20          vipor_0.4.5                
+[105] IRanges_2.26.0              gtools_3.9.2                assertthat_0.2.1            rhdf5_2.36.0               
+[109] SummarizedExperiment_1.22.0 withr_2.4.3                 S4Vectors_0.30.2            GenomeInfoDbData_1.2.6     
+[113] parallel_4.1.2              hms_1.1.1                   ggtext_0.1.1                beachmat_2.8.1             
+[117] DelayedMatrixStats_1.14.3   MatrixGenerics_1.4.3        carData_3.0-4               lubridate_1.8.0            
+[121] Biobase_2.52.0             
