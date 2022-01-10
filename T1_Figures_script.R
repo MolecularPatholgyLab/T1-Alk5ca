@@ -222,7 +222,7 @@ names(gene_list) <- row.names(DEG)
 gene_list <- sort(gene_list, decreasing = T)
 
 ################ load all genesets
-load("T1_cohort/all_genesets.RData")  #all_genesets
+load("T1_cohort/all_genesets_Human.RData")  #all_genesets
 
 
 ############# pre-ranked GSEA 
