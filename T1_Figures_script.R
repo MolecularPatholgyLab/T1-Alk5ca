@@ -478,14 +478,14 @@ dev.off()
 
 ####################################### Extended Data Figure 1d ##########################
 ## read FOCUS data
-focus <- read.delim("Sid/FOCUS/GSE156915_series_matrix.txt", skip = 69)
+focus <- read.delim("FOCUS_cohort/GSE156915_series_matrix.txt", skip = 69)
 focus[1:10,1:10]
 focus.1 <- column_to_rownames(focus, var = "ID_REF")
 focus.1[1:50,1:5]
 dim(focus.1)
 
 ## retrieve sample ids
-sample_id <- read.delim("Sid/FOCUS/GSE156915_series_matrix.txt", skip = 27, nrows = 1)
+sample_id <- read.delim("FOCUS_cohort/GSE156915_series_matrix.txt", skip = 27, nrows = 1)
 head(sample_id[1:5])
 sample_id.1 <-as.data.frame(t(sample_id))
 sample_id.1 <- rownames_to_column(sample_id.1, var = 'scort_id')
@@ -502,7 +502,7 @@ focus.1.copy[1:10,1:10]
 dim(focus.1.copy)
 
 ## read meta data
-meta <- read.csv("2021/Projects/T1_Alk5ca/Final_scripts_data/FOCUS_cohort/clin.csv")
+meta <- read.csv("FOCUS_cohort/clin.csv")
 meta.2 <- column_to_rownames(meta, var = "Sample_ID")
 dim(meta.2)
 ###### only get part of meta data which have have expression value for that
@@ -699,7 +699,7 @@ stage2CRC %>%
 ####################################### Fig 6e  & f & g & Extended Data Figure 7d ###################################
 
 #### read collapsed DEGs
-dif <- read.delim("2021/Projects/T1_Alk5ca/Final_scripts_data/Alk5/data/shrunkenLogFC_AKA_WT.csv", sep = ",")
+dif <- read.delim("Alk5/data/shrunkenLogFC_AKA_WT.csv", sep = ",")
 head(dif)
 dim(dif)
 ##
