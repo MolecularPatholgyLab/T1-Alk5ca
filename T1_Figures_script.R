@@ -286,28 +286,40 @@ dev.off()
 exp <- read.delim("T1_cohort/T1_normalized.txt")
 exp <- column_to_rownames(exp, var = "ID")
 
-## Row-wise centring expression data 
-exp.scale <- t(scale(t(exp), scale = F))
-
 ####PCA analysis
-pc <- prcomp(exp.scale, scale. = F, center = F)
-pc$rotation
-pcr <- data.frame(pc$rotation[,1:2], Group = meta$group)
-pcr$label <- meta$label
+
+pc <- prcomp(t(exp), center = T, scale. = F)
+plot(pc)
+summary(pc)
+
+#compute standard deviation of each principal component
+std_dev <- pc$sdev
+
+#compute variance
+pr_var <- std_dev^2
+
+#proportion of variance explained
+prop_varex <- pr_var/sum(pr_var)*100
+prop_varex[1:20]
+
+pcx <- data.frame(pc$x[,1:2], Group = meta$group)
+pcx$label <- meta$label
 
 ## plot
 tiff("Extended Data Figure 1A.tiff", units="mm", width=60, height=50, res=300)
-p=ggplot(pcr, aes(PC1, PC2, color = Group)) + geom_point(size=0.65)+labs(x='PC1=31.82%', y='PC2=8.91%')+
-  theme_bw(base_size = 7)+theme(axis.text.x = element_text(size = 7.5),legend.key.width = unit(2, "mm"),
-  axis.text.y = element_text(size = 7.5),axis.title = element_text(size = 9.5, family = "Helvetica"),
-  legend.text = element_text(margin = margin(r = 0.15, unit = "cm"), size=7),
-  panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-  legend.margin=margin(5,0,0,0),legend.box.margin=margin(-10,-10,-7,-10),
-  panel.background = element_blank(), legend.title = element_blank(), legend.position = "top",
-  legend.spacing.x = unit(0, 'cm'))
+p=ggplot(pcx, aes(PC1, PC2, color = Group)) + geom_point(size=0.65)+
+labs(x = paste0('PC1: ',round(prop_varex[1],2),'%'), y = paste0('PC2: ',round(prop_varex[2],2),'%'))+
+theme_bw(base_size = 7)+theme(axis.text.x = element_text(size = 7.5),legend.key.width = unit(2, "mm"),
+axis.text.y = element_text(size = 7.5),axis.title = element_text(size = 9.5, family = "Helvetica"),
+legend.text = element_text(margin = margin(r = 0.15, unit = "cm"), size=7),
+panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+legend.margin=margin(5,0,0,0),legend.box.margin=margin(-10,-10,-7,-10),
+panel.background = element_blank(), legend.title = element_blank(), legend.position = "top",
+legend.spacing.x = unit(0, 'cm'))
 
 p+scale_color_manual(values = c('Relapse' = '#ff4242', 'Non-Relapse' = '#1f1fd8'))
 dev.off()
+
 
 ####################################### Extended Data Figure 1b ##########################
 
